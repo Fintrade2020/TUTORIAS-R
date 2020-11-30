@@ -1,0 +1,130 @@
+---
+title: "Graficos"
+output: html_document
+---
+
+```{r}
+library(readxl)
+Desempleo <- read_excel("Desempleo.xlsx", 
+    sheet = "Hoja1")
+View(Desempleo)
+attach(Desempleo)
+des<-ts(`Tasa de desempleo (%)`,frequency = 12, start=c(2001,01))
+fechas=seq(as.Date("2001/1/1"), length.out = length(des), by="months")
+
+ts.plot(`des`, main="Tasa de desempleo (%)")
+
+```
+
+## R Markdown
+Plot
+Comencemos con el comando plot, este comando ubica puntos en el plano cartesiano a partir de dos vectores.
+Para empezar construya una secuencia (x) de número comenzando en 0,1 hasta 10. Ahora utilice el comando
+log para hallar el logaritmo natura a cada elemento de la secuencia construida anteriormente y guarde bajo
+el nombre (y). Finalmente, utilice el comando plot(x,y).
+
+```{r}
+x=seq(0.1,10,by=0.1)
+y=log(x)
+plot(x,y)
+```
+
+Ejercicio: Explore 'o', 'p'. ### main El comando main permite agregar el t'itulo a la gráfica
+
+```{r}
+plot(x,y, main = "logaritmo natural")
+```
+
+
+Para modificar las etiquetas de los ejes puede utilizar la opción xlab o ylab.
+
+
+```{r}
+plot(x,y, main = "logaritmo natural", xlab = "tiempo", ylab = "función")
+```
+color
+Si se desea modificar el color la opción es col:
+```{r}
+plot(x,y, main = "logaritmo natural", xlab = "tiempo", ylab = "función", col = "blue")
+
+```
+
+boxplot
+El comando boxplot construye un gráfico de cajas. Construya un vector con 100 números aleatorios con
+distribución uniforme bajo el nombre de uniforme con el comando runif.
+
+```{r}
+uniforme=runif(1000)
+boxplot(uniforme)
+
+#Las opciones main, xlab, ylab y col también son utiles con el comando boxplot.
+
+```
+
+Dirección
+Si el interés es un diagrama de caja horizontal el comando a utilizar es horizontal = T.
+
+```{r}
+boxplot(uniforme, horizontal = T)
+
+```
+
+Histograma
+Un gráfico muy util es el histograma y el comando en R para construir uno es hist
+
+```{r}
+hist(uniforme)
+```
+
+Relativo o absoluto
+
+Si lo que requiere es un histograma de frecuencias relativas la opción es freq = F
+
+```{r}
+hist(uniforme, freq = F)
+# %
+```
+
+
+```{r}
+### Numero de clases, Menor cantidad d barras
+hist(uniforme, plot = T, nclass = 4)
+```
+#Cree dos vectores el primero a que se distribuye de forma normal estandar aâˆ¼N(0,1)y el segundo b que se distribuye de forma uniforme con bâˆ¼U(0,1)que contegan 1000 observaciones cada uno y luego genere el histograma de cada uno de los vectores.
+
+
+```{r}
+library(stats)
+a <- rnorm(1000, mean=0, sd=1) #Vector normal estandar
+hist(a, col = "green")
+b <- runif(1000, min = 0, max = 1) #Vector uniforme
+hist(b, col = "pink")
+```
+
+
+
+```{r}
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

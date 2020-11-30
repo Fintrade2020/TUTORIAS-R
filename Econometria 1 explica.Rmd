@@ -1,0 +1,213 @@
+---
+title: "Untitled"
+output: html_document
+Realizado por: Daniel Esteban Castiblanco Maldonado 
+---
+
+```{r}
+library(readxl)
+Empresas <- read_excel("Ejemplo/Empresas.xlsx", 
+    sheet = "Hoja1", col_types = c("numeric", 
+        "numeric", "text", "text", "text", 
+        "text", "text", "text", "text", "numeric", 
+        "numeric", "numeric", "numeric", 
+        "numeric", "numeric", "numeric", 
+        "numeric", "numeric", "numeric", 
+        "text"))
+View(Empresas)
+attach(Empresas)
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+###Gr?fico de dispersi?n
+plot(Empresas$`INGRESOS OPERACIONALES 2018*`, Empresas$`GANANCIA (PERDIDA) 2018`)
+r<-cor(Empresas$`INGRESOS OPERACIONALES 2018*`, Empresas$`GANANCIA (PERDIDA) 2018`)
+cor.test(Empresas$`INGRESOS OPERACIONALES 2018*`, Empresas$`GANANCIA (PERDIDA) 2018`, alternative = "two.sided",conf.level = 0.95)
+r2<-r^2
+
+```
+
+## Regresi?n
+
+```{r}
+reg_1<- lm(Empresas$`GANANCIA (PERDIDA) 2018` ~ Empresas$`INGRESOS OPERACIONALES 2018*`, data=Empresas)
+summary(reg_1)
+
+reg<- lm(Empresas$`GANANCIA (PERDIDA) 2018` ~ Empresas$`INGRESOS OPERACIONALES 2018*` + Empresas$`GANANCIA (PERDIDA) 2017`, data=Empresas)
+summary(reg)
+confint(reg,1,level = 0.95)
+confint(reg,2,level = 0.95 )
+
+```
+
+```{r}
+install.packages("car")
+library(car)
+
+```
+
+```{r}
+## Gr?ficos de residuales
+par(mfrow=c(2,2))
+plot(reg)
+
+```
+
+```{r}
+## Normalidad
+error=reg$residuals
+ks.test(error,"pnorm")
+
+qqnorm(error, main = "Normal Q-Q Plot",
+       xlab = "Theoretical Quantiles", ylab = "Sample Quantiles",
+       plot.it = TRUE, datax = FALSE)
+
+
+histograma<-function(reg, nbreaks=12) {
+  z<-rstudent(reg)
+  hist(z, breaks=nbreaks, freq=FALSE, main="Histograma de residuales")
+  rug(jitter(z), col="red")
+  curve(dnorm(x,mean=mean(z), sd=sd(z)), add=TRUE, col="blue", lwd=2)
+  lines(density(z)$x, density(z)$y, col="yellow", lwd=2, lty=2)
+  }
+par(mfrow=c(1,1))
+histograma(reg)
+```
+
+```{r}
+## Multicolinealidad
+vif(reg)
+sqrt(vif(reg))>2 # problem?
+
+```
+
+```{r}
+## "No autocorrelaci?n"
+durbinWatsonTest(reg)
+## "Linealidad"
+crPlots(reg)
+## "Homoscedasticidad"
+ncvTest(reg)
+par(mfrow=c(1,1))
+spreadLevelPlot(reg)
+
+```
+
+```{r}
+## "Validaci?n global"
+install.packages("gvlma")
+library(gvlma)
+gvmodel<-gvlma(reg)
+summary(gvmodel)
+
+```
+
+```{r}
+## "Datos at?picos"
+outlierTest(reg)
+## "High leverage points"
+hat.plot<-function(reg) {
+  p<-length(coefficients(reg))
+  n<-length(fitted(reg))
+  plot(hatvalues(reg), main="High leverage points")
+  abline(h=c(2,3)*p/n, col="blue", lty=2)
+  identify(1:n, hatvalues(reg), names(hatvalues(reg)))
+}
+hat.plot(reg)
+## "Datos influyentes"
+cutoff<-4/(nrow(Empresas)-length(reg$coefficients)-2)
+plot(reg, which=4, cook.levels = cutoff)
+abline(h=cutoff, lty=2, col="green")
+avPlots(reg, ask=FALSE, onepage=TRUE, id.method="identify")
+influencePlot(reg, id.method="identify", main="Datos infuyentes", sub="Circle size is proportional to Cook's distance")
+
+```
+
+```{r}
+## Identificar datos at?picos
+atipicos<-data.frame(Empresas[c(33,7,3,1,194,27,2,19,34,4),])
+atipicos
+
+## Crear base sin atipicos
+no_atip<-Empresas[-c(33,7,3,1,194,27,2,19,34,4),]
+
+```
+
+```{r}
+###Gr?fico de dispersi?n
+plot(no_atip$`INGRESOS OPERACIONALES 2018*`, no_atip$`GANANCIA (PERDIDA) 2018`)
+r<-cor(no_atip$`INGRESOS OPERACIONALES 2018*`, no_atip$`GANANCIA (PERDIDA) 2018`)
+cor.test(no_atip$`INGRESOS OPERACIONALES 2018*`, no_atip$`GANANCIA (PERDIDA) 2018`, alternative = "two.sided",conf.level = 0.95)
+r2<-r^2
+
+```
+
+```{r}
+reg_1<- lm(no_atip$`GANANCIA (PERDIDA) 2018` ~ no_atip$`INGRESOS OPERACIONALES 2018*`, data=no_atip)
+summary(reg_1)
+
+reg<- lm(no_atip$`GANANCIA (PERDIDA) 2018` ~ no_atip$`INGRESOS OPERACIONALES 2018*` + no_atip$`GANANCIA (PERDIDA) 2017`, data=Empresas)
+summary(reg)
+
+```
+
+```{r}
+## Gr?ficos de residuales
+par(mfrow=c(2,2))
+plot(reg)
+
+```
+
+```{r}
+## Normalidad
+error=reg$residuals
+ks.test(error,"pnorm")
+
+qqnorm(error, main = "Normal Q-Q Plot",
+       xlab = "Theoretical Quantiles", ylab = "Sample Quantiles",
+       plot.it = TRUE, datax = FALSE)
+
+
+histograma<-function(reg, nbreaks=12) {
+  z<-rstudent(reg)
+  hist(z, breaks=nbreaks, freq=FALSE, main="Histograma de residuales")
+  rug(jitter(z), col="red")
+  curve(dnorm(x,mean=mean(z), sd=sd(z)), add=TRUE, col="blue", lwd=2)
+  lines(density(z)$x, density(z)$y, col="yellow", lwd=2, lty=2)
+  }
+par(mfrow=c(1,1))
+histograma(reg)
+```
+
+```{r}
+## Multicolinealidad
+vif(reg)
+sqrt(vif(reg))>2 # problem?
+```
+
+```{r}
+## "No autocorrelaci?n"
+durbinWatsonTest(reg)
+## "Linealidad"
+crPlots(reg)
+## "Homoscedasticidad"
+ncvTest(reg)
+par(mfrow=c(1,1))
+spreadLevelPlot(reg)
+
+```
+
+```{r}
+gvmodel<-gvlma(reg)
+summary(gvmodel)
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
