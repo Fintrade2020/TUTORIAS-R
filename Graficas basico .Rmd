@@ -19,7 +19,7 @@ ts.plot(`des`, main="Tasa de desempleo (%)")
 ## R Markdown
 Plot
 Comencemos con el comando plot, este comando ubica puntos en el plano cartesiano a partir de dos vectores.
-Para empezar construya una secuencia (x) de n鷐ero comenzando en 0,1 hasta 10. Ahora utilice el comando
+Para empezar construya una secuencia (x) de n煤mero comenzando en 0,1 hasta 10. Ahora utilice el comando
 log para hallar el logaritmo natura a cada elemento de la secuencia construida anteriormente y guarde bajo
 el nombre (y). Finalmente, utilice el comando plot(x,y).
 
@@ -29,40 +29,40 @@ y=log(x)
 plot(x,y)
 ```
 
-Ejercicio: Explore 'o', 'p'. ### main El comando main permite agregar el t'itulo a la gr醘ica
+Ejercicio: Explore 'o', 'p'. ### main El comando main permite agregar el t'itulo a la gr谩fica
 
 ```{r}
 plot(x,y, main = "logaritmo natural")
 ```
 
 
-Para modificar las etiquetas de los ejes puede utilizar la opci髇 xlab o ylab.
+Para modificar las etiquetas de los ejes puede utilizar la opci贸n xlab o ylab.
 
 
 ```{r}
-plot(x,y, main = "logaritmo natural", xlab = "tiempo", ylab = "funci髇")
+plot(x,y, main = "logaritmo natural", xlab = "tiempo", ylab = "funci贸n")
 ```
 color
-Si se desea modificar el color la opci髇 es col:
+Si se desea modificar el color la opci贸n es col:
 ```{r}
-plot(x,y, main = "logaritmo natural", xlab = "tiempo", ylab = "funci髇", col = "blue")
+plot(x,y, main = "logaritmo natural", xlab = "tiempo", ylab = "funci贸n", col = "blue")
 
 ```
 
 boxplot
-El comando boxplot construye un gr醘ico de cajas. Construya un vector con 100 n鷐eros aleatorios con
-distribuci髇 uniforme bajo el nombre de uniforme con el comando runif.
+El comando boxplot construye un gr谩fico de cajas. Construya un vector con 100 n煤meros aleatorios con
+distribuci贸n uniforme bajo el nombre de uniforme con el comando runif.
 
 ```{r}
 uniforme=runif(1000)
 boxplot(uniforme)
 
-#Las opciones main, xlab, ylab y col tambi閚 son utiles con el comando boxplot.
+#Las opciones main, xlab, ylab y col tambi茅n son utiles con el comando boxplot.
 
 ```
 
-Direcci髇
-Si el inter閟 es un diagrama de caja horizontal el comando a utilizar es horizontal = T.
+Direcci贸n
+Si el inter茅s es un diagrama de caja horizontal el comando a utilizar es horizontal = T.
 
 ```{r}
 boxplot(uniforme, horizontal = T)
@@ -70,7 +70,7 @@ boxplot(uniforme, horizontal = T)
 ```
 
 Histograma
-Un gr醘ico muy util es el histograma y el comando en R para construir uno es hist
+Un gr谩fico muy util es el histograma y el comando en R para construir uno es hist
 
 ```{r}
 hist(uniforme)
@@ -78,7 +78,7 @@ hist(uniforme)
 
 Relativo o absoluto
 
-Si lo que requiere es un histograma de frecuencias relativas la opci髇 es freq = F
+Si lo que requiere es un histograma de frecuencias relativas la opci贸n es freq = F
 
 ```{r}
 hist(uniforme, freq = F)
@@ -90,7 +90,7 @@ hist(uniforme, freq = F)
 ### Numero de clases, Menor cantidad d barras
 hist(uniforme, plot = T, nclass = 4)
 ```
-#Cree dos vectores el primero a que se distribuye de forma normal estandar a鈭糔(0,1)y el segundo b que se distribuye de forma uniforme con b鈭糢(0,1)que contegan 1000 observaciones cada uno y luego genere el histograma de cada uno de los vectores.
+#Cree dos vectores el primero a que se distribuye de forma normal estandar a芒藛录N(0,1)y el segundo b que se distribuye de forma uniforme con b芒藛录U(0,1)que contegan 1000 observaciones cada uno y luego genere el histograma de cada uno de los vectores.
 
 
 ```{r}
