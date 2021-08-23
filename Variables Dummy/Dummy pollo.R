@@ -15,9 +15,6 @@ View(Pollos_dummy)
 
 
 #Dummy con factor: 
-library(readxl)
-Pollos_dummy <- read_excel("D:/DANIEL/Desktop/R   epaso/Ejemplo/Dummy/Pollos dummy.xlsx")
-View(Pollos_dummy)
 
 #Fijo
 attach(Pollos_dummy)
